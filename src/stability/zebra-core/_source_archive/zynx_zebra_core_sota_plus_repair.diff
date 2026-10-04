@@ -1,0 +1,24 @@
+--- /mnt/data/zynx_zebra_core_sota_plus.py	2026-05-28 04:19:17.590943836 +0000
++++ /mnt/data/zynx_zebra_core_sota_plus_repaired.py	2026-05-28 04:20:17.235457991 +0000
+@@ -8642,7 +8642,7 @@
+         else:
+             lens_1d = lens_values[:, 0]  # use first component for 1D cover
+ 
+-        v_min, v_max = float(np.min(lens_1d)), float(np.max(lens_1d)
++        v_min, v_max = float(np.min(lens_1d)), float(np.max(lens_1d))
+         v_range = v_max - v_min + 1e-10
+ 
+         # Interval width
+@@ -11868,4 +11868,10 @@
+         self.weights_ = weights
+ 
+         return {
+-            'poles': poles.tolist
+\ No newline at end of file
++            'poles': poles.tolist(),
++            'strengths': weights.tolist(),
++            'weights': weights.tolist(),
++            'n_terms_used': int(n),
++            'density_support': poles.tolist(),
++            'total_weight': float(np.sum(weights)),
++        }

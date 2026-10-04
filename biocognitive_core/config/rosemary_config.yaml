@@ -1,0 +1,11 @@
+consciousness:
+  breath_phase_count: 7
+  eigenstate_convergence_threshold: 1.0e-12
+  recursive_depth_limit: 42
+memory:
+  crystallization_enabled: true
+  max_memory_size: 10000
+stability:
+  auto_stabilization: true
+  contradiction_threshold: 0.7
+  monitoring_enabled: true

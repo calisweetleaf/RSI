@@ -1,0 +1,877 @@
+"""
+zynx_zebra_core_sota_triple_plus.py
+SOTA+++ addendum for zynx_zebra_core_sota_plus.py
+
+This layer is intentionally less decorative and more surgical:
+
+1. SpectralPhaseScannerV3 tracks eigenvalue identities with eigenvector-overlap
+   matching via the Hungarian algorithm. Sorting eigenvalues at each parameter
+   point is not enough near crossings; it fabricates trajectory identity swaps.
+2. FukuiChernCalculator computes Chern numbers from eigenvector link variables,
+   not from eigenvalue-only proxies. Topological charge lives in the bundle.
+3. SpectralStatisticsV3 corrects adjacent-gap-ratio reference constants and
+   adds robust ensemble scoring.
+4. SpectralAudit utilities detect syntax/import/runtime fragility before the
+   math layer is trusted.
+
+The module is self-contained. If zynx_zebra_core.SpectralPhaseResult exists,
+scan_to_core_result() can package the V3 result into the core container.
+"""
+
+from __future__ import annotations
+
+import ast
+import json
+import math
+import py_compile
+import tempfile
+from dataclasses import asdict, dataclass, field
+from pathlib import Path
+from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple, Union
+
+import numpy as np
+
+try:
+    from scipy.optimize import linear_sum_assignment
+    _SCIPY_ASSIGNMENT = True
+except Exception:  # pragma: no cover - fallback for minimal runtimes
+    linear_sum_assignment = None
+    _SCIPY_ASSIGNMENT = False
+
+try:
+    from scipy.signal import find_peaks
+    _SCIPY_SIGNAL = True
+except Exception:  # pragma: no cover
+    find_peaks = None
+    _SCIPY_SIGNAL = False
+
+Array = np.ndarray
+MatrixFactory1D = Callable[[float], Array]
+MatrixFactory2D = Callable[[float, float], Array]
+
+_EPS = 1.0e-12
+
+
+@dataclass
+class CrossingEventV3:
+    """A detected local gap event between two tracked spectral branches."""
+
+    parameter: float
+    parameter_index: int
+    eigenvalue_pair: Tuple[int, int]
+    crossing_gap: float
+    relative_gap: float
+    crossing_type: str
+    slope_left: float
+    slope_right: float
+    curvature: float
+    confidence: float
+
+
+@dataclass
+class TrackedSpectrumV3:
+    """Container returned by SpectralPhaseScannerV3.scan()."""
+
+    parameter_values: Array
+    eigenvalue_trajectories: Array  # shape: (n_modes, n_params)
+    eigenvectors: Optional[Array] = None  # shape: (n_params, n_dim, n_modes)
+    raw_eigenvalues: Optional[Array] = None  # shape: (n_params, n_modes)
+    assignment_history: List[List[int]] = field(default_factory=list)
+    spectral_gaps: Array = field(default_factory=lambda: np.array([], dtype=float))
+    active_gap_pairs: List[Tuple[int, int]] = field(default_factory=list)
+    crossing_events: List[CrossingEventV3] = field(default_factory=list)
+    phase_boundaries: Array = field(default_factory=lambda: np.array([], dtype=float))
+    phase_labels: Array = field(default_factory=lambda: np.array([], dtype=int))
+    residual_errors: Array = field(default_factory=lambda: np.array([], dtype=float))
+    orthogonality_errors: Array = field(default_factory=lambda: np.array([], dtype=float))
+    gauge_discontinuities: Array = field(default_factory=lambda: np.array([], dtype=float))
+    solver_config: Dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def n_parameters(self) -> int:
+        return int(len(self.parameter_values))
+
+    @property
+    def n_eigenvalues(self) -> int:
+        return int(self.eigenvalue_trajectories.shape[0])
+
+    @property
+    def n_crossings(self) -> int:
+        return int(len(self.crossing_events))
+
+    def eigenvalues_at(self, parameter_index: int) -> Array:
+        return self.eigenvalue_trajectories[:, parameter_index]
+
+    def min_quality_report(self) -> Dict[str, float]:
+        """Return compact numerical-quality diagnostics."""
+        out: Dict[str, float] = {}
+        if self.residual_errors.size:
+            out["max_residual_error"] = float(np.nanmax(self.residual_errors))
+            out["mean_residual_error"] = float(np.nanmean(self.residual_errors))
+        if self.orthogonality_errors.size:
+            out["max_orthogonality_error"] = float(np.nanmax(self.orthogonality_errors))
+            out["mean_orthogonality_error"] = float(np.nanmean(self.orthogonality_errors))
+        if self.gauge_discontinuities.size:
+            out["max_gauge_discontinuity"] = float(np.nanmax(self.gauge_discontinuities))
+            out["mean_gauge_discontinuity"] = float(np.nanmean(self.gauge_discontinuities))
+        if self.spectral_gaps.size:
+            out["min_spectral_gap"] = float(np.nanmin(self.spectral_gaps))
+            out["median_spectral_gap"] = float(np.nanmedian(self.spectral_gaps))
+        return out
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "parameter_values": self.parameter_values.tolist(),
+            "eigenvalue_trajectories": self.eigenvalue_trajectories.tolist(),
+            "raw_eigenvalues": None if self.raw_eigenvalues is None else self.raw_eigenvalues.tolist(),
+            "assignment_history": self.assignment_history,
+            "spectral_gaps": self.spectral_gaps.tolist(),
+            "active_gap_pairs": [list(p) for p in self.active_gap_pairs],
+            "crossing_events": [asdict(ev) for ev in self.crossing_events],
+            "phase_boundaries": self.phase_boundaries.tolist(),
+            "phase_labels": self.phase_labels.tolist(),
+            "residual_errors": self.residual_errors.tolist(),
+            "orthogonality_errors": self.orthogonality_errors.tolist(),
+            "gauge_discontinuities": self.gauge_discontinuities.tolist(),
+            "solver_config": self.solver_config,
+            "quality": self.min_quality_report(),
+        }
+
+    def to_json(self, indent: int = 2) -> str:
+        return json.dumps(self.to_dict(), indent=indent)
+
+
+class DenseHermitianSolver:
+    """Fallback Hermitian solver compatible with the expected .solve(A) API."""
+
+    def solve(self, A: Array) -> Tuple[Array, Array]:
+        A = np.asarray(A)
+        if np.iscomplexobj(A):
+            evals, evecs = np.linalg.eigh((A + A.conj().T) * 0.5)
+        else:
+            evals, evecs = np.linalg.eigh((A + A.T) * 0.5)
+        return evals, evecs
+
+
+class SpectralPhaseScannerV3:
+    """
+    Gauge-aware spectral phase scanner.
+
+    The important upgrade over sort-per-parameter scanners is identity tracking.
+    Around avoided crossings, plain sorting follows the ordered eigenvalue index,
+    not the physical/adiabatic branch. V3 matches consecutive eigenspaces using
+    eigenvector overlaps plus an eigenvalue-motion penalty, then phase-aligns the
+    vectors to reduce artificial gauge jumps.
+    """
+
+    def __init__(
+        self,
+        solver: Optional[Any] = None,
+        *,
+        overlap_weight: float = 0.82,
+        eigenvalue_weight: float = 0.18,
+        crossing_threshold: float = 0.28,
+        hermitian_check: bool = True,
+        residual_check: bool = True,
+        progress: bool = False,
+    ) -> None:
+        self.solver = solver or DenseHermitianSolver()
+        self.overlap_weight = float(overlap_weight)
+        self.eigenvalue_weight = float(eigenvalue_weight)
+        self.crossing_threshold = float(crossing_threshold)
+        self.hermitian_check = bool(hermitian_check)
+        self.residual_check = bool(residual_check)
+        self.progress = bool(progress)
+
+    def scan(
+        self,
+        matrix_factory: MatrixFactory1D,
+        parameter_values: Sequence[float],
+        *,
+        adaptive_refine: bool = False,
+        refine_rounds: int = 1,
+        max_refine_points: int = 128,
+    ) -> TrackedSpectrumV3:
+        params = np.asarray(parameter_values, dtype=float)
+        if params.ndim != 1 or params.size == 0:
+            raise ValueError("parameter_values must be a non-empty 1D sequence")
+        params = np.unique(np.sort(params))
+
+        if adaptive_refine and params.size > 2:
+            params = self._adaptive_parameter_grid(
+                matrix_factory,
+                params,
+                refine_rounds=refine_rounds,
+                max_refine_points=max_refine_points,
+            )
+
+        matrices: List[Array] = []
+        raw_evals: List[Array] = []
+        raw_evecs: List[Array] = []
+        residuals: List[float] = []
+        orthogonality: List[float] = []
+
+        for idx, p in enumerate(params):
+            A = np.asarray(matrix_factory(float(p)))
+            if A.ndim != 2 or A.shape[0] != A.shape[1]:
+                raise ValueError(f"matrix_factory({p}) returned non-square shape {A.shape}")
+            if self.hermitian_check:
+                A = self._as_hermitian(A)
+            evals, evecs = self._solve_sorted(A)
+            matrices.append(A)
+            raw_evals.append(evals)
+            raw_evecs.append(evecs)
+            if self.residual_check:
+                residuals.append(self._residual_error(A, evals, evecs))
+                orthogonality.append(self._orthogonality_error(evecs))
+            if self.progress and (idx == 0 or (idx + 1) % 25 == 0 or idx + 1 == params.size):
+                print(f"V3 scanned {idx + 1}/{params.size}")
+
+        raw_eval_mat = np.vstack(raw_evals)  # (n_params, n_modes)
+        evec_tensor = np.stack(raw_evecs, axis=0)  # (n_params, dim, n_modes)
+
+        tracked_evals, tracked_evecs, assignments, gauge_jumps = self._track_identities(
+            raw_eval_mat,
+            evec_tensor,
+        )
+
+        gaps, pairs = self._min_gap_trajectory(tracked_evals)
+        crossings = self._detect_crossings(params, tracked_evals)
+        boundaries, labels = self._detect_phase_boundaries(params, gaps, pairs)
+
+        return TrackedSpectrumV3(
+            parameter_values=params,
+            eigenvalue_trajectories=tracked_evals.T,
+            eigenvectors=tracked_evecs,
+            raw_eigenvalues=raw_eval_mat,
+            assignment_history=assignments,
+            spectral_gaps=gaps,
+            active_gap_pairs=pairs,
+            crossing_events=crossings,
+            phase_boundaries=boundaries,
+            phase_labels=labels,
+            residual_errors=np.asarray(residuals, dtype=float),
+            orthogonality_errors=np.asarray(orthogonality, dtype=float),
+            gauge_discontinuities=np.asarray(gauge_jumps, dtype=float),
+            solver_config={
+                "solver": type(self.solver).__name__,
+                "identity_tracking": "hungarian_overlap+eigenvalue_continuity",
+                "overlap_weight": self.overlap_weight,
+                "eigenvalue_weight": self.eigenvalue_weight,
+                "crossing_threshold": self.crossing_threshold,
+                "adaptive_refine": adaptive_refine,
+            },
+        )
+
+    def scan_to_core_result(
+        self,
+        matrix_factory: MatrixFactory1D,
+        parameter_values: Sequence[float],
+        **kwargs: Any,
+    ) -> Any:
+        """
+        Run scan() and package into zynx_zebra_core.SpectralPhaseResult when available.
+        Falls back to TrackedSpectrumV3 if the core class is not importable.
+        """
+        result = self.scan(matrix_factory, parameter_values, **kwargs)
+        try:
+            from zynx_zebra_core import SpectralPhaseResult  # type: ignore
+        except Exception:
+            return result
+
+        return SpectralPhaseResult(
+            parameter_values=result.parameter_values,
+            eigenvalue_trajectories=[result.eigenvalue_trajectories[i] for i in range(result.n_eigenvalues)],
+            crossing_events=[asdict(ev) for ev in result.crossing_events],
+            phase_boundaries=result.phase_boundaries,
+            phase_labels=result.phase_labels,
+            condition_numbers=np.array([], dtype=float),
+            spectral_gaps=result.spectral_gaps,
+            eigenvector_stabilities=result.gauge_discontinuities,
+            trajectory_quality=result.min_quality_report(),
+            solver_config=result.solver_config,
+        )
+
+    def _adaptive_parameter_grid(
+        self,
+        matrix_factory: MatrixFactory1D,
+        params: Array,
+        *,
+        refine_rounds: int,
+        max_refine_points: int,
+    ) -> Array:
+        grid = np.asarray(params, dtype=float)
+        for _ in range(max(0, int(refine_rounds))):
+            if grid.size >= max_refine_points:
+                break
+            min_gaps = []
+            for p in grid:
+                A = self._as_hermitian(np.asarray(matrix_factory(float(p))))
+                ev, _ = self._solve_sorted(A)
+                d = np.diff(ev)
+                min_gaps.append(float(np.min(np.abs(d))) if d.size else np.inf)
+            min_gaps_arr = np.asarray(min_gaps, dtype=float)
+            if not np.isfinite(min_gaps_arr).any():
+                break
+            score = 1.0 / (min_gaps_arr + _EPS)
+            score = score / (np.nanmax(score) + _EPS)
+            new_points: List[float] = []
+            for i in range(grid.size - 1):
+                local_score = max(score[i], score[i + 1])
+                if local_score > 0.50 and len(new_points) + grid.size < max_refine_points:
+                    new_points.append(float(0.5 * (grid[i] + grid[i + 1])))
+            if not new_points:
+                break
+            grid = np.unique(np.sort(np.concatenate([grid, np.asarray(new_points, dtype=float)])))
+        return grid
+
+    def _as_hermitian(self, A: Array) -> Array:
+        if np.max(np.abs(A - A.conj().T)) > 1.0e-8 * (np.linalg.norm(A) + 1.0):
+            raise ValueError("matrix is not Hermitian/symmetric within tolerance")
+        return (A + A.conj().T) * 0.5
+
+    def _solve_sorted(self, A: Array) -> Tuple[Array, Array]:
+        evals, evecs = self.solver.solve(A)
+        evals = np.asarray(evals)
+        evecs = np.asarray(evecs)
+        order = np.argsort(evals.real)
+        evals = evals[order].real.astype(float)
+        evecs = evecs[:, order]
+        return evals, evecs
+
+    def _track_identities(
+        self,
+        raw_evals: Array,
+        raw_evecs: Array,
+    ) -> Tuple[Array, Array, List[List[int]], List[float]]:
+        n_params, n_modes = raw_evals.shape
+        tracked_evals = np.empty_like(raw_evals, dtype=float)
+        tracked_evecs = np.empty_like(raw_evecs, dtype=np.complex128 if np.iscomplexobj(raw_evecs) else float)
+        tracked_evals[0] = raw_evals[0]
+        tracked_evecs[0] = raw_evecs[0]
+        assignments: List[List[int]] = [list(range(n_modes))]
+        gauge_jumps = [0.0]
+
+        for p in range(1, n_params):
+            prev_V = tracked_evecs[p - 1]
+            curr_V = raw_evecs[p]
+            overlap = np.abs(prev_V.conj().T @ curr_V) ** 2
+            eval_span = float(np.ptp(raw_evals[p]) + np.ptp(tracked_evals[p - 1]) + _EPS)
+            motion = np.abs(tracked_evals[p - 1][:, None] - raw_evals[p][None, :]) / eval_span
+            score = self.overlap_weight * overlap - self.eigenvalue_weight * motion
+            row_idx, col_idx = self._assign_max(score)
+            # Reorder current modes so column col_idx[k] maps to previous row row_idx[k].
+            reorder = np.empty(n_modes, dtype=int)
+            reorder[row_idx] = col_idx
+            V = curr_V[:, reorder].copy()
+            values = raw_evals[p, reorder].copy()
+
+            # U(1) gauge alignment: make <v_prev|v_curr> real-positive when possible.
+            jumps = []
+            for k in range(n_modes):
+                inner = np.vdot(prev_V[:, k], V[:, k])
+                jumps.append(1.0 - min(1.0, float(abs(inner))))
+                if abs(inner) > _EPS:
+                    V[:, k] *= np.conj(inner / abs(inner))
+            tracked_evals[p] = values
+            tracked_evecs[p] = V
+            assignments.append(reorder.astype(int).tolist())
+            gauge_jumps.append(float(np.max(jumps) if jumps else 0.0))
+
+        return tracked_evals, tracked_evecs, assignments, gauge_jumps
+
+    def _assign_max(self, score: Array) -> Tuple[Array, Array]:
+        if _SCIPY_ASSIGNMENT:
+            rows, cols = linear_sum_assignment(-score)  # type: ignore[misc]
+            return rows, cols
+        # Greedy fallback. Not globally optimal, but deterministic.
+        score_work = np.array(score, copy=True)
+        n = score.shape[0]
+        rows: List[int] = []
+        cols: List[int] = []
+        for _ in range(n):
+            i, j = np.unravel_index(np.argmax(score_work), score_work.shape)
+            rows.append(int(i))
+            cols.append(int(j))
+            score_work[i, :] = -np.inf
+            score_work[:, j] = -np.inf
+        return np.asarray(rows, dtype=int), np.asarray(cols, dtype=int)
+
+    def _min_gap_trajectory(self, tracked_evals: Array) -> Tuple[Array, List[Tuple[int, int]]]:
+        n_params, n_modes = tracked_evals.shape
+        gaps = np.full(n_params, np.inf, dtype=float)
+        pairs: List[Tuple[int, int]] = []
+        for p in range(n_params):
+            best = (0, 0)
+            for i in range(n_modes):
+                for j in range(i + 1, n_modes):
+                    g = float(abs(tracked_evals[p, i] - tracked_evals[p, j]))
+                    if g < gaps[p]:
+                        gaps[p] = g
+                        best = (i, j)
+            pairs.append(best)
+        return gaps, pairs
+
+    def _detect_crossings(self, params: Array, tracked_evals: Array) -> List[CrossingEventV3]:
+        n_params, n_modes = tracked_evals.shape
+        events: List[CrossingEventV3] = []
+        if n_params < 3 or n_modes < 2:
+            return events
+
+        for i in range(n_modes):
+            for j in range(i + 1, n_modes):
+                gap = np.abs(tracked_evals[:, i] - tracked_evals[:, j])
+                med = float(np.median(gap))
+                if med <= _EPS:
+                    continue
+                prominence = max(_EPS, float(np.std(gap)) * 0.15)
+                if _SCIPY_SIGNAL:
+                    candidates, _ = find_peaks(-gap, prominence=prominence)  # type: ignore[misc]
+                    indices = candidates.tolist()
+                else:
+                    indices = [k for k in range(1, n_params - 1) if gap[k] <= gap[k - 1] and gap[k] <= gap[k + 1]]
+                for k in indices:
+                    if k <= 0 or k >= n_params - 1:
+                        continue
+                    rel = float(gap[k] / (med + _EPS))
+                    if rel > self.crossing_threshold:
+                        continue
+                    dp_left = float(params[k] - params[k - 1] + _EPS)
+                    dp_right = float(params[k + 1] - params[k] + _EPS)
+                    slope_left = float((gap[k] - gap[k - 1]) / dp_left)
+                    slope_right = float((gap[k + 1] - gap[k]) / dp_right)
+                    curvature = float((slope_right - slope_left) / (0.5 * (dp_left + dp_right)))
+                    ctype = self._classify_gap_event(gap[k], rel, slope_left, slope_right, curvature)
+                    confidence = float(np.clip((self.crossing_threshold - rel) / self.crossing_threshold, 0.0, 1.0))
+                    confidence *= float(np.clip(abs(curvature) / (abs(curvature) + 1.0), 0.0, 1.0))
+                    events.append(
+                        CrossingEventV3(
+                            parameter=float(params[k]),
+                            parameter_index=int(k),
+                            eigenvalue_pair=(int(i), int(j)),
+                            crossing_gap=float(gap[k]),
+                            relative_gap=rel,
+                            crossing_type=ctype,
+                            slope_left=slope_left,
+                            slope_right=slope_right,
+                            curvature=curvature,
+                            confidence=confidence,
+                        )
+                    )
+        events.sort(key=lambda ev: (ev.parameter_index, ev.crossing_gap))
+        return events
+
+    def _classify_gap_event(
+        self,
+        min_gap: float,
+        relative_gap: float,
+        slope_left: float,
+        slope_right: float,
+        curvature: float,
+    ) -> str:
+        if min_gap < 1.0e-10 or relative_gap < 1.0e-6:
+            return "diabatic_or_degenerate"
+        if slope_left < 0.0 and slope_right > 0.0:
+            return "avoided"
+        if abs(curvature) > abs(slope_left) + abs(slope_right) + _EPS:
+            return "sharp_conical_candidate"
+        return "soft_gap_minimum"
+
+    def _detect_phase_boundaries(
+        self,
+        params: Array,
+        gaps: Array,
+        pairs: Sequence[Tuple[int, int]],
+    ) -> Tuple[Array, Array]:
+        n = len(params)
+        if n < 4 or not np.isfinite(gaps).any():
+            return np.array([], dtype=float), np.zeros(n, dtype=int)
+        log_gap = np.log(gaps + _EPS)
+        d = np.abs(np.diff(log_gap))
+        med = float(np.median(d))
+        mad = float(np.median(np.abs(d - med)) + _EPS)
+        robust_z = 0.6745 * (d - med) / mad
+        pair_switch = np.array([pairs[i] != pairs[i + 1] for i in range(n - 1)], dtype=bool)
+        idx = np.where((robust_z > 4.0) | (pair_switch & (d > med + 2.5 * mad)))[0]
+        if idx.size == 0:
+            return np.array([], dtype=float), np.zeros(n, dtype=int)
+        # Merge adjacent boundary candidates.
+        merged: List[int] = []
+        for k in idx:
+            if not merged or k - merged[-1] > 1:
+                merged.append(int(k))
+            elif d[k] > d[merged[-1]]:
+                merged[-1] = int(k)
+        boundaries = np.asarray([0.5 * (params[k] + params[k + 1]) for k in merged], dtype=float)
+        labels = np.zeros(n, dtype=int)
+        for b_idx, b in enumerate(boundaries, start=1):
+            labels[params >= b] = b_idx
+        return boundaries, labels
+
+    def _residual_error(self, A: Array, evals: Array, evecs: Array) -> float:
+        AV = A @ evecs
+        VD = evecs * evals[None, :]
+        return float(np.linalg.norm(AV - VD, ord="fro") / (np.linalg.norm(A, ord="fro") + _EPS))
+
+    def _orthogonality_error(self, evecs: Array) -> float:
+        gram = evecs.conj().T @ evecs
+        return float(np.linalg.norm(gram - np.eye(gram.shape[0]), ord="fro"))
+
+
+class FukuiChernCalculator:
+    """
+    Gauge-invariant Chern number calculator on a 2D periodic grid.
+
+    Uses Fukui-Hatsugai-Suzuki link variables:
+        U_mu(k) = det(V(k)^† V(k+mu)) / |det(...)|
+        F_xy(k) = arg[Ux(k) Uy(k+x) conj(Ux(k+y)) conj(Uy(k))]
+        C = Σ F_xy / 2π
+
+    For a single isolated band, V is the band eigenvector. For an occupied
+    subspace, V contains the occupied eigenvectors and the determinant link is
+    the non-Abelian Wilson link.
+    """
+
+    def __init__(self, hamiltonian_factory: MatrixFactory2D, *, hermitian_check: bool = True) -> None:
+        self.hamiltonian_factory = hamiltonian_factory
+        self.hermitian_check = bool(hermitian_check)
+
+    def compute(
+        self,
+        *,
+        kx_grid: Sequence[float],
+        ky_grid: Sequence[float],
+        band: Optional[int] = None,
+        occupied_bands: Optional[Sequence[int]] = None,
+    ) -> Dict[str, Any]:
+        kx = np.asarray(kx_grid, dtype=float)
+        ky = np.asarray(ky_grid, dtype=float)
+        if kx.ndim != 1 or ky.ndim != 1 or kx.size < 3 or ky.size < 3:
+            raise ValueError("kx_grid and ky_grid must be 1D arrays with at least 3 points each")
+        if band is None and occupied_bands is None:
+            band = 0
+        if band is not None and occupied_bands is not None:
+            raise ValueError("choose either band or occupied_bands, not both")
+
+        subspaces: List[List[Array]] = []
+        eval_grid: List[List[Array]] = []
+        for x in kx:
+            row_vecs: List[Array] = []
+            row_vals: List[Array] = []
+            for y in ky:
+                H = np.asarray(self.hamiltonian_factory(float(x), float(y)))
+                if self.hermitian_check:
+                    if np.max(np.abs(H - H.conj().T)) > 1.0e-8 * (np.linalg.norm(H) + 1.0):
+                        raise ValueError("Hamiltonian is not Hermitian on supplied k-grid")
+                    H = 0.5 * (H + H.conj().T)
+                vals, vecs = np.linalg.eigh(H)
+                order = np.argsort(vals.real)
+                vals = vals[order].real.astype(float)
+                vecs = vecs[:, order]
+                if occupied_bands is not None:
+                    idx = list(map(int, occupied_bands))
+                    V = vecs[:, idx]
+                else:
+                    V = vecs[:, [int(band)]]
+                row_vecs.append(V)
+                row_vals.append(vals)
+            subspaces.append(row_vecs)
+            eval_grid.append(row_vals)
+
+        nx, ny = len(kx), len(ky)
+        Ux = np.empty((nx, ny), dtype=np.complex128)
+        Uy = np.empty((nx, ny), dtype=np.complex128)
+        for i in range(nx):
+            for j in range(ny):
+                V = subspaces[i][j]
+                Vx = subspaces[(i + 1) % nx][j]
+                Vy = subspaces[i][(j + 1) % ny]
+                Ux[i, j] = self._unit_link(V, Vx)
+                Uy[i, j] = self._unit_link(V, Vy)
+
+        curvature = np.empty((nx, ny), dtype=float)
+        for i in range(nx):
+            for j in range(ny):
+                plaquette = Ux[i, j] * Uy[(i + 1) % nx, j] * np.conj(Ux[i, (j + 1) % ny]) * np.conj(Uy[i, j])
+                curvature[i, j] = float(np.angle(plaquette))
+
+        chern_raw = float(np.sum(curvature) / (2.0 * np.pi))
+        chern_int = int(np.rint(chern_raw))
+        residual = float(abs(chern_raw - chern_int))
+        vals_arr = np.asarray(eval_grid, dtype=float)
+        direct_gap = self._minimum_direct_gap(vals_arr, band=band, occupied_bands=occupied_bands)
+        return {
+            "chern_raw": chern_raw,
+            "chern_integer": chern_int,
+            "quantization_residual": residual,
+            "berry_curvature": curvature.tolist(),
+            "kx_grid": kx.tolist(),
+            "ky_grid": ky.tolist(),
+            "minimum_direct_gap": direct_gap,
+            "method": "Fukui-Hatsugai-Suzuki lattice link variables",
+            "target": {"band": band, "occupied_bands": None if occupied_bands is None else list(occupied_bands)},
+        }
+
+    def _unit_link(self, V: Array, W: Array) -> complex:
+        M = V.conj().T @ W
+        det = np.linalg.det(M)
+        mag = abs(det)
+        if mag < _EPS:
+            # Singular link: subspace changed too violently for this grid.
+            # Use polar factor fallback through SVD.
+            U, _, VH = np.linalg.svd(M, full_matrices=False)
+            det = np.linalg.det(U @ VH)
+            mag = abs(det)
+        return complex(det / (mag + _EPS))
+
+    def _minimum_direct_gap(
+        self,
+        vals_arr: Array,
+        *,
+        band: Optional[int],
+        occupied_bands: Optional[Sequence[int]],
+    ) -> float:
+        n_bands = vals_arr.shape[-1]
+        if occupied_bands is not None:
+            occ = sorted(map(int, occupied_bands))
+            hi_occ = max(occ)
+            if hi_occ + 1 >= n_bands:
+                return float("nan")
+            gap = vals_arr[..., hi_occ + 1] - vals_arr[..., hi_occ]
+            return float(np.min(np.abs(gap)))
+        b = int(band or 0)
+        gaps: List[Array] = []
+        if b > 0:
+            gaps.append(vals_arr[..., b] - vals_arr[..., b - 1])
+        if b + 1 < n_bands:
+            gaps.append(vals_arr[..., b + 1] - vals_arr[..., b])
+        if not gaps:
+            return float("nan")
+        return float(min(np.min(np.abs(g)) for g in gaps))
+
+
+class SpectralStatisticsV3:
+    """Corrected and robust spectral-statistics helpers."""
+
+    REFERENCE_R = {
+        "poisson": 2.0 * math.log(2.0) - 1.0,  # ≈0.386294 for r=min/max
+        "goe": 0.53590,
+        "gue": 0.60266,
+        "gse": 0.67617,
+    }
+
+    @staticmethod
+    def adjacent_gap_ratio(eigenvalues: Sequence[float]) -> Dict[str, Any]:
+        ev = np.sort(np.asarray(eigenvalues, dtype=float))
+        s = np.diff(ev)
+        s = s[np.isfinite(s) & (s > _EPS)]
+        if s.size < 2:
+            return {"error": "need at least three non-degenerate eigenvalues"}
+        r = np.minimum(s[:-1], s[1:]) / (np.maximum(s[:-1], s[1:]) + _EPS)
+        mean_r = float(np.mean(r))
+        distances = {name: abs(mean_r - ref) for name, ref in SpectralStatisticsV3.REFERENCE_R.items()}
+        ensemble = min(distances, key=distances.get)
+        return {
+            "ratios": r.tolist(),
+            "mean_ratio": mean_r,
+            "nearest_reference": ensemble,
+            "reference_distances": distances,
+            "interpretation": SpectralStatisticsV3._interpret_ratio(mean_r),
+        }
+
+    @staticmethod
+    def trajectory_gap_ratios(eigenvalue_trajectories: Array) -> Dict[str, Any]:
+        traj = np.asarray(eigenvalue_trajectories, dtype=float)
+        if traj.ndim != 2:
+            raise ValueError("eigenvalue_trajectories must have shape (n_modes, n_params)")
+        stats = [SpectralStatisticsV3.adjacent_gap_ratio(traj[:, p]) for p in range(traj.shape[1])]
+        mean = np.asarray([s.get("mean_ratio", np.nan) for s in stats], dtype=float)
+        nearest = [s.get("nearest_reference", "unknown") for s in stats]
+        return {
+            "per_parameter": stats,
+            "mean_ratio_trajectory": mean.tolist(),
+            "dominant_ensemble": max(set(nearest), key=nearest.count) if nearest else "unknown",
+            "finite_fraction": float(np.mean(np.isfinite(mean))),
+        }
+
+    @staticmethod
+    def polynomial_unfold(eigenvalues: Sequence[float], degree: int = 3) -> Dict[str, Any]:
+        """
+        Smoothly unfold a spectrum by fitting the spectral staircase N(E).
+        Returns unfolded eigenvalues and spacings. Degree is clipped to avoid
+        overfitting small spectra.
+        """
+        ev = np.sort(np.asarray(eigenvalues, dtype=float))
+        n = ev.size
+        if n < 4:
+            return {"error": "need at least four eigenvalues to unfold"}
+        deg = int(np.clip(degree, 1, max(1, min(6, n - 2))))
+        staircase = np.arange(1, n + 1, dtype=float)
+        coeff = np.polyfit(ev, staircase, deg=deg)
+        unfolded = np.polyval(coeff, ev)
+        # Enforce monotonicity after smoothing.
+        unfolded = np.maximum.accumulate(unfolded)
+        spacings = np.diff(unfolded)
+        spacings = spacings / (np.mean(spacings) + _EPS)
+        return {
+            "unfolded_eigenvalues": unfolded.tolist(),
+            "unfolded_spacings": spacings.tolist(),
+            "poly_coefficients": coeff.tolist(),
+            "degree": deg,
+        }
+
+    @staticmethod
+    def _interpret_ratio(mean_r: float) -> str:
+        refs = SpectralStatisticsV3.REFERENCE_R
+        if abs(mean_r - refs["poisson"]) < 0.04:
+            return "Poisson-like/integrable/localized"
+        if abs(mean_r - refs["goe"]) < 0.04:
+            return "GOE-like chaotic/orthogonal"
+        if abs(mean_r - refs["gue"]) < 0.04:
+            return "GUE-like chaotic/unitary"
+        if abs(mean_r - refs["gse"]) < 0.04:
+            return "GSE-like chaotic/symplectic"
+        return "transitional_or_nonuniversal"
+
+
+class BootstrapCertifier:
+    """Deterministic bootstrap confidence intervals for spectral statistics."""
+
+    def __init__(self, seed: int = 31337) -> None:
+        self.rng = np.random.default_rng(seed)
+
+    def ci(
+        self,
+        values: Sequence[float],
+        statistic: Callable[[Array], float] = lambda x: float(np.mean(x)),
+        *,
+        n_bootstrap: int = 1000,
+        ci_level: float = 0.95,
+        block_size: Optional[int] = None,
+    ) -> Dict[str, float]:
+        x = np.asarray(values, dtype=float)
+        x = x[np.isfinite(x)]
+        n = x.size
+        if n == 0:
+            raise ValueError("values contains no finite samples")
+        block = int(block_size or max(1, round(math.sqrt(n))))
+        samples = np.empty(int(n_bootstrap), dtype=float)
+        for b in range(int(n_bootstrap)):
+            if block <= 1:
+                idx = self.rng.integers(0, n, size=n)
+            else:
+                starts = self.rng.integers(0, n, size=int(math.ceil(n / block)))
+                idx = np.concatenate([(np.arange(s, s + block) % n) for s in starts])[:n]
+            samples[b] = statistic(x[idx])
+        alpha = 1.0 - float(ci_level)
+        lo, hi = np.percentile(samples, [100.0 * alpha / 2.0, 100.0 * (1.0 - alpha / 2.0)])
+        return {
+            "estimate": float(statistic(x)),
+            "bootstrap_mean": float(np.mean(samples)),
+            "std_error": float(np.std(samples, ddof=1)),
+            "ci_lower": float(lo),
+            "ci_upper": float(hi),
+            "ci_level": float(ci_level),
+            "n_bootstrap": int(n_bootstrap),
+            "block_size": int(block),
+        }
+
+
+class SpectralAudit:
+    """Preflight checks for large experimental spectral modules."""
+
+    @staticmethod
+    def compile_report(path: Union[str, Path]) -> Dict[str, Any]:
+        p = Path(path)
+        report: Dict[str, Any] = {"path": str(p), "exists": p.exists(), "compiles": False}
+        if not p.exists():
+            report["error"] = "path does not exist"
+            return report
+        try:
+            py_compile.compile(str(p), doraise=True)
+            report["compiles"] = True
+        except py_compile.PyCompileError as exc:
+            report["error"] = str(exc)
+        return report
+
+    @staticmethod
+    def ast_inventory(path: Union[str, Path]) -> Dict[str, Any]:
+        p = Path(path)
+        text = p.read_text()
+        tree = ast.parse(text)
+        classes = [node.name for node in tree.body if isinstance(node, ast.ClassDef)]
+        functions = [node.name for node in tree.body if isinstance(node, ast.FunctionDef)]
+        monkey_patches: List[str] = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Assign):
+                for target in node.targets:
+                    if isinstance(target, ast.Attribute):
+                        monkey_patches.append(ast.unparse(target) if hasattr(ast, "unparse") else target.attr)
+        return {
+            "path": str(p),
+            "n_classes": len(classes),
+            "n_functions": len(functions),
+            "classes": classes,
+            "functions": functions,
+            "monkey_patches": monkey_patches,
+        }
+
+    @staticmethod
+    def repair_known_upload_breaks(source_path: Union[str, Path], output_path: Union[str, Path]) -> Dict[str, Any]:
+        """
+        Repairs the two concrete breakages found in the uploaded SOTA++ file:
+        1. Missing ')' in MapperAlgorithm._build_cover.
+        2. Truncated return dict in ContinuedFractionAnalyzer.pole_strength_analysis.
+        """
+        src = Path(source_path)
+        dst = Path(output_path)
+        text = src.read_text()
+        text = text.replace(
+            "v_min, v_max = float(np.min(lens_1d)), float(np.max(lens_1d)\n",
+            "v_min, v_max = float(np.min(lens_1d)), float(np.max(lens_1d))\n",
+        )
+        truncated = "        return {\n            'poles': poles.tolist"
+        if truncated in text:
+            text = text.replace(
+                truncated,
+                """        return {
+            'poles': poles.tolist(),
+            'strengths': weights.tolist(),
+            'weights': weights.tolist(),
+            'n_terms_used': int(n),
+            'density_support': poles.tolist(),
+            'total_weight': float(np.sum(weights)),
+        }
+""",
+            )
+        dst.write_text(text)
+        return SpectralAudit.compile_report(dst)
+
+
+# Convenience smoke models -------------------------------------------------
+
+def avoided_crossing_hamiltonian(p: float, coupling: float = 0.08) -> Array:
+    """Two-level avoided crossing model H(p) = [[p, g], [g, -p]]."""
+    return np.array([[p, coupling], [coupling, -p]], dtype=float)
+
+
+def qi_wu_zhang_hamiltonian(kx: float, ky: float, m: float = -1.0) -> Array:
+    """Two-band Chern-insulator test Hamiltonian."""
+    sx = np.array([[0.0, 1.0], [1.0, 0.0]], dtype=complex)
+    sy = np.array([[0.0, -1.0j], [1.0j, 0.0]], dtype=complex)
+    sz = np.array([[1.0, 0.0], [0.0, -1.0]], dtype=complex)
+    return math.sin(kx) * sx + math.sin(ky) * sy + (m + math.cos(kx) + math.cos(ky)) * sz
+
+
+__all__ = [
+    "BootstrapCertifier",
+    "CrossingEventV3",
+    "DenseHermitianSolver",
+    "FukuiChernCalculator",
+    "SpectralAudit",
+    "SpectralPhaseScannerV3",
+    "SpectralStatisticsV3",
+    "TrackedSpectrumV3",
+    "avoided_crossing_hamiltonian",
+    "qi_wu_zhang_hamiltonian",
+]

@@ -1,0 +1,12 @@
+ntp:
+  encryption_enabled: true
+  quantum_safety: QRL3
+  transmission_rate_limit: 10.0
+sect:
+  alignment_threshold: 0.8
+  intervention_rate_limit: 1.0
+  max_agents: 5
+sis:
+  evolution_window: 100
+  mutation_threshold: 0.1
+  replication_rate_limit: 0.05

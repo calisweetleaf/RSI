@@ -1,0 +1,30 @@
+biocognitive:
+  enabled: true
+  ntp_interface: true
+  sect_agents: true
+  sis_network: true
+integration:
+  monitoring_interval: 5.0
+  sync_interval: 2.0
+  translation_enabled: true
+  unified_monitoring: true
+logging:
+  file_logging: true
+  level: INFO
+  metrics_export: true
+  tracing_enabled: true
+rosemary:
+  breath_sync: true
+  eigenstate_monitoring: true
+  enabled: true
+  recursive_depth_limit: 42
+safety:
+  boundary_enforcement: true
+  coherence_threshold: 0.3
+  emergency_shutoff: true
+  identity_preservation: true
+system:
+  auto_recovery: true
+  mode: unified
+  name: Unified Consciousness System
+  version: 1.0.0

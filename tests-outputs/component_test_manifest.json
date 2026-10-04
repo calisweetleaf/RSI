@@ -1,0 +1,1954 @@
+{
+  "run_id": "20260106T234012Z",
+  "started_at": "2026-01-06T23:40:12.488306Z",
+  "completed_at": "2026-01-06T23:40:22.216928Z",
+  "duration_s": 9.728622,
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26100-SP0",
+  "cwd": "C:\\Users\\treyr\\Desktop\\rosemaryv4",
+  "venv": "C:\\Users\\treyr\\Desktop\\rosemaryv4\\.venv",
+  "summary": {
+    "total": 10,
+    "passed": 10,
+    "failed": 0
+  },
+  "results": [
+    {
+      "name": "nanobot_spec_validation",
+      "module": "sis.network",
+      "status": "passed",
+      "duration_s": 0.4473792999924626,
+      "error": null
+    },
+    {
+      "name": "nanobot_node_behavior",
+      "module": "sis.network",
+      "status": "passed",
+      "duration_s": 0.002377199998591095,
+      "error": null
+    },
+    {
+      "name": "cognitive_state_differential",
+      "module": "sect.agent",
+      "status": "passed",
+      "duration_s": 0.02538259999710135,
+      "error": null
+    },
+    {
+      "name": "cognitive_state_merge",
+      "module": "sect.agent",
+      "status": "passed",
+      "duration_s": 0.00044899998465552926,
+      "error": null
+    },
+    {
+      "name": "modification_plan_roundtrip",
+      "module": "sect.agent",
+      "status": "passed",
+      "duration_s": 6.839999696239829e-05,
+      "error": null
+    },
+    {
+      "name": "sect_agent_full_cycle",
+      "module": "sect.agent",
+      "status": "passed",
+      "duration_s": 8.25757329998305,
+      "error": null
+    },
+    {
+      "name": "integration_flow",
+      "module": "integration.flow",
+      "status": "passed",
+      "duration_s": 0.44535870000254363,
+      "error": null
+    },
+    {
+      "name": "sect_agent_long_loop",
+      "module": "sect.agent",
+      "status": "passed",
+      "duration_s": 0.5349806999729481,
+      "error": null
+    },
+    {
+      "name": "therapy_session_success",
+      "module": "sect.therapy",
+      "status": "passed",
+      "duration_s": 0.0026092999905813485,
+      "error": null
+    },
+    {
+      "name": "therapy_session_adaptation",
+      "module": "sect.therapy",
+      "status": "passed",
+      "duration_s": 0.0015459999849554151,
+      "error": null
+    }
+  ],
+  "logs": [
+    {
+      "timestamp": "2026-01-06T23:40:12.488870Z",
+      "level": "INFO",
+      "message": "Component tests starting at 2026-01-06T23:40:12.488306Z"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.490067Z",
+      "level": "INFO",
+      "message": "START nanobot_spec_validation (sis.network)"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.938163Z",
+      "level": "INFO",
+      "message": "PASS nanobot_spec_validation in 0.4474s"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.938163Z",
+      "level": "INFO",
+      "message": "START nanobot_node_behavior (sis.network)"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.941249Z",
+      "level": "INFO",
+      "message": "PASS nanobot_node_behavior in 0.0024s"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.941249Z",
+      "level": "INFO",
+      "message": "START cognitive_state_differential (sect.agent)"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.967324Z",
+      "level": "INFO",
+      "message": "PASS cognitive_state_differential in 0.0254s"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.967999Z",
+      "level": "INFO",
+      "message": "START cognitive_state_merge (sect.agent)"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.968788Z",
+      "level": "INFO",
+      "message": "PASS cognitive_state_merge in 0.0004s"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.969527Z",
+      "level": "INFO",
+      "message": "START modification_plan_roundtrip (sect.agent)"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.970195Z",
+      "level": "INFO",
+      "message": "PASS modification_plan_roundtrip in 0.0001s"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.970872Z",
+      "level": "INFO",
+      "message": "START sect_agent_full_cycle (sect.agent)"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:12.972939Z",
+      "level": "INFO",
+      "message": "Full cycle: building agent config and integration context"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:20.015444Z",
+      "level": "INFO",
+      "message": "Full cycle: starting sequential run"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:20.017742Z",
+      "level": "INFO",
+      "message": "Full cycle: sequential run completed"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:21.228787Z",
+      "level": "INFO",
+      "message": "PASS sect_agent_full_cycle in 8.2576s"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:21.229335Z",
+      "level": "INFO",
+      "message": "START integration_flow (integration.flow)"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:21.242897Z",
+      "level": "INFO",
+      "message": "Integration flow: starting sequential SIS -> NTP -> SECT pass"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:21.675343Z",
+      "level": "INFO",
+      "message": "PASS integration_flow in 0.4454s"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:21.675343Z",
+      "level": "INFO",
+      "message": "START sect_agent_long_loop (sect.agent)"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:21.676543Z",
+      "level": "INFO",
+      "message": "Long loop: starting sequential steady-state run"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:22.210950Z",
+      "level": "INFO",
+      "message": "PASS sect_agent_long_loop in 0.5350s"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:22.211507Z",
+      "level": "INFO",
+      "message": "START therapy_session_success (sect.therapy)"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:22.214547Z",
+      "level": "INFO",
+      "message": "PASS therapy_session_success in 0.0026s"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:22.215119Z",
+      "level": "INFO",
+      "message": "START therapy_session_adaptation (sect.therapy)"
+    },
+    {
+      "timestamp": "2026-01-06T23:40:22.216928Z",
+      "level": "INFO",
+      "message": "PASS therapy_session_adaptation in 0.0015s"
+    }
+  ],
+  "full_cycle": {
+    "overview": "Sequential SECT agent cycle with deterministic inputs and no parallel execution.",
+    "input_summary": {
+      "cognitive_load": 0.75,
+      "self_awareness_level": 0.35,
+      "attention_focus_count": 1,
+      "emotional_valence_mean": -0.2,
+      "memory_activation_mean": 0.2,
+      "thought_pattern_mean": -0.11666666666666665
+    },
+    "output_summary": {
+      "cognitive_load": 0.85455,
+      "self_awareness_level": 0.40750000000000003,
+      "attention_focus_count": 2,
+      "emotional_valence_mean": -0.05487499999999998,
+      "memory_activation_mean": 0.2,
+      "thought_pattern_mean": 0.1638
+    },
+    "diff": {
+      "magnitude": 0.25784799569785777,
+      "rate_of_change": 8.04979565704056e-09
+    },
+    "timeline": [
+      {
+        "step": "input_state",
+        "timestamp": "2026-01-06T23:40:20.016045Z",
+        "data": {
+          "cognitive_load": 0.75,
+          "self_awareness_level": 0.35,
+          "attention_focus_count": 1,
+          "emotional_valence_mean": -0.2,
+          "memory_activation_mean": 0.2,
+          "thought_pattern_mean": -0.11666666666666665
+        }
+      },
+      {
+        "step": "initial_state_loaded",
+        "timestamp": "2026-01-06T23:40:20.016045Z",
+        "data": {
+          "cognitive_load": 0.75,
+          "self_awareness_level": 0.35,
+          "attention_focus_count": 1,
+          "emotional_valence_mean": -0.2,
+          "memory_activation_mean": 0.2,
+          "thought_pattern_mean": -0.11666666666666665
+        }
+      },
+      {
+        "step": "metacognitive_monitoring",
+        "timestamp": "2026-01-06T23:40:20.016045Z",
+        "data": {
+          "pattern_coherence": 0.10855388459943133,
+          "load_anomaly": 0,
+          "emotional_consistency": 0.30000000000000004,
+          "self_awareness": 0.35,
+          "timestamp": "2026-01-06T23:40:20.016045"
+        }
+      },
+      {
+        "step": "intervention_selection",
+        "timestamp": "2026-01-06T23:40:20.016632Z",
+        "data": {
+          "scored": [
+            {
+              "id": "243dec54-0777-4dd0-8511-82ca964f6473",
+              "type": "CognitiveReframing",
+              "priority": 0.8,
+              "applicability": 1.7165566354647268,
+              "weighted": 1.3732453083717815
+            },
+            {
+              "id": "d281434b-29b7-4c1d-9590-356a410f8422",
+              "type": "EmotionalRegulation",
+              "priority": 0.7,
+              "applicability": 1.2,
+              "weighted": 0.84
+            },
+            {
+              "id": "93758c76-4761-49c9-bac9-9ff5d8627c2b",
+              "type": "URSMIFContradictionIntervention",
+              "priority": 0.9,
+              "applicability": 0.0,
+              "weighted": 0.0
+            }
+          ],
+          "selected_ids": [
+            "243dec54-0777-4dd0-8511-82ca964f6473",
+            "d281434b-29b7-4c1d-9590-356a410f8422"
+          ]
+        }
+      },
+      {
+        "step": "intervention_application",
+        "timestamp": "2026-01-06T23:40:20.017190Z",
+        "data": {
+          "before": {
+            "cognitive_load": 0.75,
+            "self_awareness_level": 0.35,
+            "attention_focus_count": 1,
+            "emotional_valence_mean": -0.2,
+            "memory_activation_mean": 0.2,
+            "thought_pattern_mean": -0.11666666666666665
+          },
+          "after": {
+            "cognitive_load": 0.85455,
+            "self_awareness_level": 0.40750000000000003,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": -0.05487499999999998,
+            "memory_activation_mean": 0.2,
+            "thought_pattern_mean": 0.1638
+          }
+        }
+      },
+      {
+        "step": "self_modification",
+        "timestamp": "2026-01-06T23:40:20.017190Z",
+        "data": {
+          "plan": {
+            "level": "LEVEL_1",
+            "target_component": "general_parameters",
+            "type": "GRADIENT_OPTIMIZATION",
+            "description": "Periodic parameter optimization",
+            "success_metrics": {
+              "convergence_threshold": 0.0001,
+              "iteration_limit": 1000
+            },
+            "resource_estimate": 1.0,
+            "validation_checks": []
+          }
+        }
+      },
+      {
+        "step": "metrics_update",
+        "timestamp": "2026-01-06T23:40:20.017742Z",
+        "data": {
+          "therapeutic_interventions": 2,
+          "evolution_cycles": 1,
+          "evolution_modifications": 1
+        }
+      }
+    ],
+    "interventions": [
+      {
+        "id": "243dec54-0777-4dd0-8511-82ca964f6473",
+        "type": "CognitiveReframing",
+        "effectiveness": 0.531943828249997,
+        "timestamp": "2026-01-06T17:40:20.016632Z",
+        "diff": {
+          "magnitude": 0.17866422456770353,
+          "rate_of_change": 5.57774550506451e-09
+        }
+      },
+      {
+        "id": "d281434b-29b7-4c1d-9590-356a410f8422",
+        "type": "EmotionalRegulation",
+        "effectiveness": 0.43710959334463956,
+        "timestamp": "2026-01-06T17:40:20.016632Z",
+        "diff": {
+          "magnitude": 0.1794684697673243,
+          "rate_of_change": Infinity
+        }
+      }
+    ],
+    "metrics": {
+      "load_anomaly": 0.0,
+      "therapeutic_interventions": 2,
+      "evolution_modifications": 1,
+      "evolution_cycles": 1
+    },
+    "recursion_depth_final": 0,
+    "modification_plan": {
+      "level": "LEVEL_1",
+      "target_component": "general_parameters",
+      "type": "GRADIENT_OPTIMIZATION",
+      "description": "Periodic parameter optimization",
+      "success_metrics": {
+        "convergence_threshold": 0.0001,
+        "iteration_limit": 1000
+      },
+      "resource_estimate": 1.0,
+      "validation_checks": []
+    },
+    "chart_path": "test_artifacts\\sect_full_cycle.png"
+  },
+  "integration_flow": {
+    "overview": "Sequential SIS -> NTP -> SECT integration flow with deterministic inputs.",
+    "sis_node": {
+      "node_id": "integration-node-1",
+      "state": "dormant",
+      "connected_nodes": [
+        "integration-node-2"
+      ],
+      "health_metrics": {
+        "energy_level": 0.86,
+        "integrity": 0.92,
+        "contamination": 0.0,
+        "error_rate": 0.0,
+        "responsiveness": 1.0
+      },
+      "replication_rate": 0.05,
+      "energy_efficiency": 0.8
+    },
+    "sis_signal": {
+      "timestamp": 1767742821.2434826,
+      "amplitude": 0.86,
+      "frequency": 8.6,
+      "coherence": 0.92,
+      "domain": "cognitive",
+      "node_id": "integration-node-1",
+      "state": "dormant"
+    },
+    "ntp_decoded": {
+      "timestamp": 1767742821.2434826,
+      "amplitude": 0.86,
+      "frequency": 8.6,
+      "coherence": 0.92,
+      "domain": "cognitive",
+      "node_id": "integration-node-1",
+      "state": "dormant",
+      "method": "QRL2"
+    },
+    "input_summary": {
+      "cognitive_load": 0.07999999999999996,
+      "self_awareness_level": 0.916,
+      "attention_focus_count": 2,
+      "emotional_valence_mean": 0.42000000000000004,
+      "memory_activation_mean": 0.086,
+      "thought_pattern_mean": 0.622
+    },
+    "output_summary": {
+      "cognitive_load": 0.12999999999999995,
+      "self_awareness_level": 0.9410000000000001,
+      "attention_focus_count": 2,
+      "emotional_valence_mean": 0.42000000000000004,
+      "memory_activation_mean": 0.086,
+      "thought_pattern_mean": 0.6603333333333333
+    },
+    "diff": {
+      "magnitude": 0.03132491021535415,
+      "rate_of_change": 1.2279944417795345
+    },
+    "timeline": [
+      {
+        "step": "sis_node_ready",
+        "timestamp": "2026-01-06T23:40:21.243482Z",
+        "data": {
+          "node_id": "integration-node-1",
+          "state": "dormant",
+          "connected_nodes": [
+            "integration-node-2"
+          ],
+          "health_metrics": {
+            "energy_level": 0.86,
+            "integrity": 0.92,
+            "contamination": 0.0,
+            "error_rate": 0.0,
+            "responsiveness": 1.0
+          },
+          "replication_rate": 0.05,
+          "energy_efficiency": 0.8
+        }
+      },
+      {
+        "step": "sis_signal_emitted",
+        "timestamp": "2026-01-06T23:40:21.243482Z",
+        "data": {
+          "timestamp": 1767742821.2434826,
+          "amplitude": 0.86,
+          "frequency": 8.6,
+          "coherence": 0.92,
+          "domain": "cognitive",
+          "node_id": "integration-node-1",
+          "state": "dormant"
+        }
+      },
+      {
+        "step": "ntp_signal_encoded",
+        "timestamp": "2026-01-06T23:40:21.245507Z",
+        "data": {
+          "bytes": 159,
+          "level": "QRL2"
+        }
+      },
+      {
+        "step": "ntp_signal_decoded",
+        "timestamp": "2026-01-06T23:40:21.245507Z",
+        "data": {
+          "timestamp": 1767742821.2434826,
+          "amplitude": 0.86,
+          "frequency": 8.6,
+          "coherence": 0.92,
+          "domain": "cognitive",
+          "node_id": "integration-node-1",
+          "state": "dormant",
+          "method": "QRL2"
+        }
+      },
+      {
+        "step": "sect_input_state",
+        "timestamp": "2026-01-06T23:40:21.245507Z",
+        "data": {
+          "cognitive_load": 0.07999999999999996,
+          "self_awareness_level": 0.916,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.42000000000000004,
+          "memory_activation_mean": 0.086,
+          "thought_pattern_mean": 0.622
+        }
+      },
+      {
+        "step": "sect_initial_state_loaded",
+        "timestamp": "2026-01-06T23:40:21.268992Z",
+        "data": {
+          "cognitive_load": 0.07999999999999996,
+          "self_awareness_level": 0.916,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.42000000000000004,
+          "memory_activation_mean": 0.086,
+          "thought_pattern_mean": 0.622
+        }
+      },
+      {
+        "step": "sect_metacognitive_monitoring",
+        "timestamp": "2026-01-06T23:40:21.268992Z",
+        "data": {
+          "pattern_coherence": 0.379799947340702,
+          "load_anomaly": 0,
+          "emotional_consistency": 0.0,
+          "self_awareness": 0.916,
+          "timestamp": "2026-01-06T23:40:21.268992"
+        }
+      },
+      {
+        "step": "sect_intervention_selection",
+        "timestamp": "2026-01-06T23:40:21.268992Z",
+        "data": {
+          "scored": [
+            {
+              "id": "aa2dba48-00b9-4281-a236-dcf2267feda8",
+              "type": "CognitiveReframing",
+              "priority": 0.75,
+              "applicability": 0.9985404885544356,
+              "weighted": 0.7489053664158267
+            },
+            {
+              "id": "711055a1-60cb-45b4-8cdf-15f7c64f33e1",
+              "type": "EmotionalRegulation",
+              "priority": 0.6,
+              "applicability": 0.58,
+              "weighted": 0.348
+            },
+            {
+              "id": "19946682-1b52-431a-9149-296b7b339dc4",
+              "type": "URSMIFContradictionIntervention",
+              "priority": 0.9,
+              "applicability": 0.0,
+              "weighted": 0.0
+            }
+          ],
+          "selected_ids": [
+            "aa2dba48-00b9-4281-a236-dcf2267feda8"
+          ]
+        }
+      },
+      {
+        "step": "sect_intervention_application",
+        "timestamp": "2026-01-06T23:40:21.269542Z",
+        "data": {
+          "before": {
+            "cognitive_load": 0.07999999999999996,
+            "self_awareness_level": 0.916,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.42000000000000004,
+            "memory_activation_mean": 0.086,
+            "thought_pattern_mean": 0.622
+          },
+          "after": {
+            "cognitive_load": 0.12999999999999995,
+            "self_awareness_level": 0.9410000000000001,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.42000000000000004,
+            "memory_activation_mean": 0.086,
+            "thought_pattern_mean": 0.6603333333333333
+          }
+        }
+      },
+      {
+        "step": "sect_self_modification",
+        "timestamp": "2026-01-06T23:40:21.269542Z",
+        "data": {
+          "plan": {
+            "level": "LEVEL_1",
+            "target_component": "general_parameters",
+            "type": "GRADIENT_OPTIMIZATION",
+            "description": "Periodic parameter optimization",
+            "success_metrics": {
+              "convergence_threshold": 0.0001,
+              "iteration_limit": 1000
+            },
+            "resource_estimate": 1.0,
+            "validation_checks": []
+          }
+        }
+      },
+      {
+        "step": "sect_metrics_update",
+        "timestamp": "2026-01-06T23:40:21.269542Z",
+        "data": {
+          "therapeutic_interventions": 1,
+          "evolution_cycles": 1,
+          "evolution_modifications": 1
+        }
+      }
+    ],
+    "interventions": [
+      {
+        "id": "aa2dba48-00b9-4281-a236-dcf2267feda8",
+        "type": "CognitiveReframing",
+        "effectiveness": 0.468056171750003,
+        "timestamp": "2026-01-06T17:40:21.268992Z",
+        "diff": {
+          "magnitude": 0.03132491021535415,
+          "rate_of_change": 1.2279944417795345
+        }
+      }
+    ],
+    "metrics": {
+      "load_anomaly": 0.0,
+      "therapeutic_interventions": 1,
+      "evolution_modifications": 1,
+      "evolution_cycles": 1
+    },
+    "recursion_depth_final": 0,
+    "modification_plan": {
+      "level": "LEVEL_1",
+      "target_component": "general_parameters",
+      "type": "GRADIENT_OPTIMIZATION",
+      "description": "Periodic parameter optimization",
+      "success_metrics": {
+        "convergence_threshold": 0.0001,
+        "iteration_limit": 1000
+      },
+      "resource_estimate": 1.0,
+      "validation_checks": []
+    },
+    "chart_path": "test_artifacts\\integration_flow.png"
+  },
+  "long_loop": {
+    "overview": "Sequential SECT long-loop run with decaying noise injection to observe steady-state stabilization over multiple cycles.",
+    "configuration": {
+      "cycles": 20,
+      "noise_base": 0.08,
+      "noise_floor": 0.01,
+      "adaptation_frequency": 3,
+      "self_modification_enabled": false,
+      "max_concurrent_interventions": 1
+    },
+    "steady_state": {
+      "window": 5,
+      "mean_inter_cycle_diff": 0.009763336495144822,
+      "std_inter_cycle_diff": 0.0019064648068354976,
+      "stable": true
+    },
+    "initial_output_summary": {
+      "cognitive_load": 0.6644925249011688,
+      "self_awareness_level": 0.42934788210620906,
+      "attention_focus_count": 2,
+      "emotional_valence_mean": -0.04165372183976365,
+      "memory_activation_mean": 0.1817669757108013,
+      "thought_pattern_mean": 0.38825242810482036
+    },
+    "final_output_summary": {
+      "cognitive_load": 1.0389465869450463,
+      "self_awareness_level": 0.810936746245832,
+      "attention_focus_count": 2,
+      "emotional_valence_mean": 0.08613958252500725,
+      "memory_activation_mean": 0.19163654796457655,
+      "thought_pattern_mean": 0.4464540951683164
+    },
+    "timeline": [
+      {
+        "step": "cycle_1_input",
+        "timestamp": "2026-01-06T23:40:21.699661Z",
+        "data": {
+          "cognitive_load": 0.6244925249011688,
+          "self_awareness_level": 0.40934788210620904,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": -0.07142118842229546,
+          "memory_activation_mean": 0.1817669757108013,
+          "thought_pattern_mean": 0.34708738017470075
+        }
+      },
+      {
+        "step": "cycle_1_output",
+        "timestamp": "2026-01-06T23:40:21.700265Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.6644925249011688,
+            "self_awareness_level": 0.42934788210620906,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": -0.04165372183976365,
+            "memory_activation_mean": 0.1817669757108013,
+            "thought_pattern_mean": 0.38825242810482036
+          },
+          "cycle_diff_magnitude": 0.03668876030523375,
+          "inter_cycle_diff_magnitude": 0.0,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_2_input",
+        "timestamp": "2026-01-06T23:40:21.700265Z",
+        "data": {
+          "cognitive_load": 0.6531902327605795,
+          "self_awareness_level": 0.4655628293120463,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": -0.06059997346692969,
+          "memory_activation_mean": 0.1671369294002785,
+          "thought_pattern_mean": 0.41178768275728556
+        }
+      },
+      {
+        "step": "cycle_2_output",
+        "timestamp": "2026-01-06T23:40:21.700858Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.6931902327605796,
+            "self_awareness_level": 0.4855628293120463,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": -0.030840308768629157,
+            "memory_activation_mean": 0.1671369294002785,
+            "thought_pattern_mean": 0.4270726096543713
+          },
+          "cycle_diff_magnitude": 0.027678986755290597,
+          "inter_cycle_diff_magnitude": 0.03663273349170582,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_3_input",
+        "timestamp": "2026-01-06T23:40:21.700858Z",
+        "data": {
+          "cognitive_load": 0.6700769923881387,
+          "self_awareness_level": 0.4796973891809156,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0016617506725088715,
+          "memory_activation_mean": 0.18248575784109747,
+          "thought_pattern_mean": 0.35118279318860796
+        }
+      },
+      {
+        "step": "cycle_3_output",
+        "timestamp": "2026-01-06T23:40:21.701941Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.7100769923881387,
+            "self_awareness_level": 0.4996973891809156,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.019594204078715927,
+            "memory_activation_mean": 0.18248575784109747,
+            "thought_pattern_mean": 0.39070967591316474
+          },
+          "cycle_diff_magnitude": 0.03489499773447747,
+          "inter_cycle_diff_magnitude": 0.031459073265736895,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_4_input",
+        "timestamp": "2026-01-06T23:40:21.701941Z",
+        "data": {
+          "cognitive_load": 0.7071279216291009,
+          "self_awareness_level": 0.47833566591588,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0332354432747495,
+          "memory_activation_mean": 0.1920507302251329,
+          "thought_pattern_mean": 0.39436010998485815
+        }
+      },
+      {
+        "step": "cycle_4_output",
+        "timestamp": "2026-01-06T23:40:21.702487Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.7471889855922056,
+            "self_awareness_level": 0.4983661978974324,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.045328269893547914,
+            "memory_activation_mean": 0.1920507302251329,
+            "thought_pattern_mean": 0.4118995749815535
+          },
+          "cycle_diff_magnitude": 0.022339851043716316,
+          "inter_cycle_diff_magnitude": 0.022410015284644702,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_5_input",
+        "timestamp": "2026-01-06T23:40:21.702487Z",
+        "data": {
+          "cognitive_load": 0.6965384484176035,
+          "self_awareness_level": 0.4803353224461951,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.02405427471235562,
+          "memory_activation_mean": 0.1911659008302079,
+          "thought_pattern_mean": 0.44923925779870144
+        }
+      },
+      {
+        "step": "cycle_5_output",
+        "timestamp": "2026-01-06T23:40:21.703569Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.7365995123807083,
+            "self_awareness_level": 0.5003658544277475,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.03211172307816482,
+            "memory_activation_mean": 0.1911659008302079,
+            "thought_pattern_mean": 0.4447935522872862
+          },
+          "cycle_diff_magnitude": 0.01789387311488659,
+          "inter_cycle_diff_magnitude": 0.02485003302299712,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_6_input",
+        "timestamp": "2026-01-06T23:40:21.703569Z",
+        "data": {
+          "cognitive_load": 0.7360394748802364,
+          "self_awareness_level": 0.5013607131439277,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.060113807802168115,
+          "memory_activation_mean": 0.17498578868842385,
+          "thought_pattern_mean": 0.495623876870902
+        }
+      },
+      {
+        "step": "cycle_6_output",
+        "timestamp": "2026-01-06T23:40:21.704115Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.7761005388433411,
+            "self_awareness_level": 0.5213912451254801,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.062304999897790064,
+            "memory_activation_mean": 0.17498578868842385,
+            "thought_pattern_mean": 0.47259599944392994
+          },
+          "cycle_diff_magnitude": 0.021995890623884674,
+          "inter_cycle_diff_magnitude": 0.03234435789138515,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_7_input",
+        "timestamp": "2026-01-06T23:40:21.704115Z",
+        "data": {
+          "cognitive_load": 0.7667231138288376,
+          "self_awareness_level": 0.5141670380931902,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06001070362406967,
+          "memory_activation_mean": 0.18807529820380298,
+          "thought_pattern_mean": 0.4760882655904788
+        }
+      },
+      {
+        "step": "cycle_7_output",
+        "timestamp": "2026-01-06T23:40:21.704676Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.8066254584412462,
+            "self_awareness_level": 0.5341182103993946,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.06550697156947505,
+            "memory_activation_mean": 0.18807529820380298,
+            "thought_pattern_mean": 0.4636963859542817
+          },
+          "cycle_diff_magnitude": 0.018422020523352872,
+          "inter_cycle_diff_magnitude": 0.014514309511350245,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_8_input",
+        "timestamp": "2026-01-06T23:40:21.705233Z",
+        "data": {
+          "cognitive_load": 0.801109317566715,
+          "self_awareness_level": 0.5555019768343121,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.07678094345269422,
+          "memory_activation_mean": 0.2018135818960429,
+          "thought_pattern_mean": 0.4559708613084994
+        }
+      },
+      {
+        "step": "cycle_8_output",
+        "timestamp": "2026-01-06T23:40:21.706317Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.8410116621791236,
+            "self_awareness_level": 0.5754531491405165,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.07827998841370945,
+            "memory_activation_mean": 0.2018135818960429,
+            "thought_pattern_mean": 0.4516062976559691
+          },
+          "cycle_diff_magnitude": 0.0163753876751011,
+          "inter_cycle_diff_magnitude": 0.022569242884809878,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_9_input",
+        "timestamp": "2026-01-06T23:40:21.706317Z",
+        "data": {
+          "cognitive_load": 0.8566059589789192,
+          "self_awareness_level": 0.5924462626212053,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06860653162267447,
+          "memory_activation_mean": 0.2210448782616378,
+          "thought_pattern_mean": 0.4906001281553607
+        }
+      },
+      {
+        "step": "cycle_9_output",
+        "timestamp": "2026-01-06T23:40:21.708076Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.8965083035913278,
+            "self_awareness_level": 0.6123974349274096,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.0687595813733165,
+            "memory_activation_mean": 0.2210448782616378,
+            "thought_pattern_mean": 0.4724176751088452
+          },
+          "cycle_diff_magnitude": 0.01997512271933454,
+          "inter_cycle_diff_magnitude": 0.02861705846141405,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_10_input",
+        "timestamp": "2026-01-06T23:40:21.708748Z",
+        "data": {
+          "cognitive_load": 0.8761252164301317,
+          "self_awareness_level": 0.5810681786224556,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06116351440890438,
+          "memory_activation_mean": 0.21813994670402112,
+          "thought_pattern_mean": 0.44253649277537194
+        }
+      },
+      {
+        "step": "cycle_10_output",
+        "timestamp": "2026-01-06T23:40:21.709357Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.9158035872698539,
+            "self_awareness_level": 0.6009073640423167,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.06375927193408162,
+            "memory_activation_mean": 0.21813994670402112,
+            "thought_pattern_mean": 0.44570014477806863
+          },
+          "cycle_diff_magnitude": 0.018860832661672818,
+          "inter_cycle_diff_magnitude": 0.02571834141312969,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_11_input",
+        "timestamp": "2026-01-06T23:40:21.709357Z",
+        "data": {
+          "cognitive_load": 0.9132178195589363,
+          "self_awareness_level": 0.6030936739174484,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06135711594002599,
+          "memory_activation_mean": 0.22472896041855392,
+          "thought_pattern_mean": 0.45263702974696857
+        }
+      },
+      {
+        "step": "cycle_11_output",
+        "timestamp": "2026-01-06T23:40:21.710442Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 0.9528961903986585,
+            "self_awareness_level": 0.6229328593373095,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.06244670389771369,
+            "memory_activation_mean": 0.22472896041855392,
+            "thought_pattern_mean": 0.4517929532332719
+          },
+          "cycle_diff_magnitude": 0.019528666210948984,
+          "inter_cycle_diff_magnitude": 0.020274193443803587,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_12_input",
+        "timestamp": "2026-01-06T23:40:21.710442Z",
+        "data": {
+          "cognitive_load": 0.9624603751319265,
+          "self_awareness_level": 0.6238271047490842,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06372332864185128,
+          "memory_activation_mean": 0.21162961495692917,
+          "thought_pattern_mean": 0.4315580747546392
+        }
+      },
+      {
+        "step": "cycle_12_output",
+        "timestamp": "2026-01-06T23:40:21.711524Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 1.0021387459716486,
+            "self_awareness_level": 0.6436662901689453,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.0656506578092502,
+            "memory_activation_mean": 0.21162961495692917,
+            "thought_pattern_mean": 0.4390777841719371
+          },
+          "cycle_diff_magnitude": 0.017113425383092445,
+          "inter_cycle_diff_magnitude": 0.025323419352972717,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_13_input",
+        "timestamp": "2026-01-06T23:40:21.711524Z",
+        "data": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.6328119042235923,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0771637940660815,
+          "memory_activation_mean": 0.20785453990567437,
+          "thought_pattern_mean": 0.4562228462209901
+        }
+      },
+      {
+        "step": "cycle_13_output",
+        "timestamp": "2026-01-06T23:40:21.712609Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 1.039449001782496,
+            "self_awareness_level": 0.6525364051148403,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.0771637940660815,
+            "memory_activation_mean": 0.20785453990567437,
+            "thought_pattern_mean": 0.45306712228713075
+          },
+          "cycle_diff_magnitude": 0.016044778107038513,
+          "inter_cycle_diff_magnitude": 0.019293926521170877,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_14_input",
+        "timestamp": "2026-01-06T23:40:21.712609Z",
+        "data": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.6582312867798314,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08023592568761395,
+          "memory_activation_mean": 0.19803080072202345,
+          "thought_pattern_mean": 0.42551281431887605
+        }
+      },
+      {
+        "step": "cycle_14_output",
+        "timestamp": "2026-01-06T23:40:21.713855Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 1.039449001782496,
+            "self_awareness_level": 0.6779557876710794,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.08023592568761395,
+            "memory_activation_mean": 0.19803080072202345,
+            "thought_pattern_mean": 0.43447189141748677
+          },
+          "cycle_diff_magnitude": 0.01696337158422559,
+          "inter_cycle_diff_magnitude": 0.01649877027895141,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_15_input",
+        "timestamp": "2026-01-06T23:40:21.713855Z",
+        "data": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.6699311037504646,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.07700060266213625,
+          "memory_activation_mean": 0.20442226432269628,
+          "thought_pattern_mean": 0.4292234975845781
+        }
+      },
+      {
+        "step": "cycle_15_output",
+        "timestamp": "2026-01-06T23:40:21.715161Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 1.039449001782496,
+            "self_awareness_level": 0.6896556046417126,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.07700060266213625,
+            "memory_activation_mean": 0.20442226432269628,
+            "thought_pattern_mean": 0.4367187471755592
+          },
+          "cycle_diff_magnitude": 0.017383155810807703,
+          "inter_cycle_diff_magnitude": 0.009837126619076948,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_16_input",
+        "timestamp": "2026-01-06T23:40:21.715161Z",
+        "data": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.6920770041647286,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0777248974003218,
+          "memory_activation_mean": 0.19402770292005758,
+          "thought_pattern_mean": 0.44592014512700406
+        }
+      },
+      {
+        "step": "cycle_16_output",
+        "timestamp": "2026-01-06T23:40:21.716359Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 1.0391969713549813,
+            "self_awareness_level": 0.7116754898422193,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.0777248974003218,
+            "memory_activation_mean": 0.19402770292005758,
+            "thought_pattern_mean": 0.4459210384978743
+          },
+          "cycle_diff_magnitude": 0.01571530135407904,
+          "inter_cycle_diff_magnitude": 0.01098290840540238,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_17_input",
+        "timestamp": "2026-01-06T23:40:21.716359Z",
+        "data": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.7102861957146626,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.07604134406555972,
+          "memory_activation_mean": 0.1950145084643456,
+          "thought_pattern_mean": 0.44369650886621687
+        }
+      },
+      {
+        "step": "cycle_17_output",
+        "timestamp": "2026-01-06T23:40:21.716933Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 1.0391969713549813,
+            "self_awareness_level": 0.7298846813921532,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.07604976181896168,
+            "memory_activation_mean": 0.1950145084643456,
+            "thought_pattern_mean": 0.4445690003052669
+          },
+          "cycle_diff_magnitude": 0.01596654781042817,
+          "inter_cycle_diff_magnitude": 0.00702352761114706,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_18_input",
+        "timestamp": "2026-01-06T23:40:21.717489Z",
+        "data": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.7331820514960836,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08000210297973691,
+          "memory_activation_mean": 0.1964158199950261,
+          "thought_pattern_mean": 0.44099450282028513
+        }
+      },
+      {
+        "step": "cycle_18_output",
+        "timestamp": "2026-01-06T23:40:21.718043Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 1.0391969713549813,
+            "self_awareness_level": 0.7527805371735743,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.08000210297973691,
+            "memory_activation_mean": 0.1964158199950261,
+            "thought_pattern_mean": 0.44292609879516887
+          },
+          "cycle_diff_magnitude": 0.016079225432674857,
+          "inter_cycle_diff_magnitude": 0.008532828886132826,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_19_input",
+        "timestamp": "2026-01-06T23:40:21.718604Z",
+        "data": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.7674751159295918,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08178412196438375,
+          "memory_activation_mean": 0.19137836334758013,
+          "thought_pattern_mean": 0.4424108302142133
+        }
+      },
+      {
+        "step": "cycle_19_output",
+        "timestamp": "2026-01-06T23:40:21.719158Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 1.0389465869450463,
+            "self_awareness_level": 0.786948409402115,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.08178412196438375,
+            "memory_activation_mean": 0.19137836334758013,
+            "thought_pattern_mean": 0.44354508295765843
+          },
+          "cycle_diff_magnitude": 0.015541979478478912,
+          "inter_cycle_diff_magnitude": 0.012531850035243125,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      },
+      {
+        "step": "cycle_20_input",
+        "timestamp": "2026-01-06T23:40:21.719740Z",
+        "data": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.7914634527733089,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08613958252500725,
+          "memory_activation_mean": 0.19163654796457655,
+          "thought_pattern_mean": 0.447175530605393
+        }
+      },
+      {
+        "step": "cycle_20_output",
+        "timestamp": "2026-01-06T23:40:21.720334Z",
+        "data": {
+          "summary": {
+            "cognitive_load": 1.0389465869450463,
+            "self_awareness_level": 0.810936746245832,
+            "attention_focus_count": 2,
+            "emotional_valence_mean": 0.08613958252500725,
+            "memory_activation_mean": 0.19163654796457655,
+            "thought_pattern_mean": 0.4464540951683164
+          },
+          "cycle_diff_magnitude": 0.01608409232141174,
+          "inter_cycle_diff_magnitude": 0.009745567537798717,
+          "interventions_applied": 1,
+          "load_anomaly": 0.0
+        }
+      }
+    ],
+    "cycles": [
+      {
+        "cycle": 1,
+        "noise_scale": 0.08,
+        "input_summary": {
+          "cognitive_load": 0.6244925249011688,
+          "self_awareness_level": 0.40934788210620904,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": -0.07142118842229546,
+          "memory_activation_mean": 0.1817669757108013,
+          "thought_pattern_mean": 0.34708738017470075
+        },
+        "output_summary": {
+          "cognitive_load": 0.6644925249011688,
+          "self_awareness_level": 0.42934788210620906,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": -0.04165372183976365,
+          "memory_activation_mean": 0.1817669757108013,
+          "thought_pattern_mean": 0.38825242810482036
+        },
+        "cycle_diff_magnitude": 0.03668876030523375,
+        "inter_cycle_diff_magnitude": 0.0,
+        "inter_cycle_diff": null,
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.5129866774907338,
+          "count": 1
+        }
+      },
+      {
+        "cycle": 2,
+        "noise_scale": 0.07200000000000001,
+        "input_summary": {
+          "cognitive_load": 0.6531902327605795,
+          "self_awareness_level": 0.4655628293120463,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": -0.06059997346692969,
+          "memory_activation_mean": 0.1671369294002785,
+          "thought_pattern_mean": 0.41178768275728556
+        },
+        "output_summary": {
+          "cognitive_load": 0.6931902327605796,
+          "self_awareness_level": 0.4855628293120463,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": -0.030840308768629157,
+          "memory_activation_mean": 0.1671369294002785,
+          "thought_pattern_mean": 0.4270726096543713
+        },
+        "cycle_diff_magnitude": 0.027678986755290597,
+        "inter_cycle_diff_magnitude": 0.03663273349170582,
+        "inter_cycle_diff": {
+          "magnitude": 0.03663273349170582,
+          "rate_of_change": 60.65022101275798
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.5129820129474473,
+          "count": 2
+        }
+      },
+      {
+        "cycle": 3,
+        "noise_scale": 0.06480000000000001,
+        "input_summary": {
+          "cognitive_load": 0.6700769923881387,
+          "self_awareness_level": 0.4796973891809156,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0016617506725088715,
+          "memory_activation_mean": 0.18248575784109747,
+          "thought_pattern_mean": 0.35118279318860796
+        },
+        "output_summary": {
+          "cognitive_load": 0.7100769923881387,
+          "self_awareness_level": 0.4996973891809156,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.019594204078715927,
+          "memory_activation_mean": 0.18248575784109747,
+          "thought_pattern_mean": 0.39070967591316474
+        },
+        "cycle_diff_magnitude": 0.03489499773447747,
+        "inter_cycle_diff_magnitude": 0.031459073265736895,
+        "inter_cycle_diff": {
+          "magnitude": 0.031459073265736895,
+          "rate_of_change": 27.71724516805013
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.5076329953880965,
+          "count": 3
+        }
+      },
+      {
+        "cycle": 4,
+        "noise_scale": 0.05832000000000001,
+        "input_summary": {
+          "cognitive_load": 0.7071279216291009,
+          "self_awareness_level": 0.47833566591588,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0332354432747495,
+          "memory_activation_mean": 0.1920507302251329,
+          "thought_pattern_mean": 0.39436010998485815
+        },
+        "output_summary": {
+          "cognitive_load": 0.7471889855922056,
+          "self_awareness_level": 0.4983661978974324,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.045328269893547914,
+          "memory_activation_mean": 0.1920507302251329,
+          "thought_pattern_mean": 0.4118995749815535
+        },
+        "cycle_diff_magnitude": 0.022339851043716316,
+        "inter_cycle_diff_magnitude": 0.022410015284644702,
+        "inter_cycle_diff": {
+          "magnitude": 0.022410015284644702,
+          "rate_of_change": 41.423318455905175
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.502669468413429,
+          "count": 4
+        }
+      },
+      {
+        "cycle": 5,
+        "noise_scale": 0.052488,
+        "input_summary": {
+          "cognitive_load": 0.6965384484176035,
+          "self_awareness_level": 0.4803353224461951,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.02405427471235562,
+          "memory_activation_mean": 0.1911659008302079,
+          "thought_pattern_mean": 0.44923925779870144
+        },
+        "output_summary": {
+          "cognitive_load": 0.7365995123807083,
+          "self_awareness_level": 0.5003658544277475,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.03211172307816482,
+          "memory_activation_mean": 0.1911659008302079,
+          "thought_pattern_mean": 0.4447935522872862
+        },
+        "cycle_diff_magnitude": 0.01789387311488659,
+        "inter_cycle_diff_magnitude": 0.02485003302299712,
+        "inter_cycle_diff": {
+          "magnitude": 0.02485003302299712,
+          "rate_of_change": 22.840103881431176
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4983770759801245,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 6,
+        "noise_scale": 0.04723920000000001,
+        "input_summary": {
+          "cognitive_load": 0.7360394748802364,
+          "self_awareness_level": 0.5013607131439277,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.060113807802168115,
+          "memory_activation_mean": 0.17498578868842385,
+          "thought_pattern_mean": 0.495623876870902
+        },
+        "output_summary": {
+          "cognitive_load": 0.7761005388433411,
+          "self_awareness_level": 0.5213912451254801,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.062304999897790064,
+          "memory_activation_mean": 0.17498578868842385,
+          "thought_pattern_mean": 0.47259599944392994
+        },
+        "cycle_diff_magnitude": 0.021995890623884674,
+        "inter_cycle_diff_magnitude": 0.03234435789138515,
+        "inter_cycle_diff": {
+          "magnitude": 0.03234435789138515,
+          "rate_of_change": 59.89695905812065
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4900966552936505,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 7,
+        "noise_scale": 0.04251528,
+        "input_summary": {
+          "cognitive_load": 0.7667231138288376,
+          "self_awareness_level": 0.5141670380931902,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06001070362406967,
+          "memory_activation_mean": 0.18807529820380298,
+          "thought_pattern_mean": 0.4760882655904788
+        },
+        "output_summary": {
+          "cognitive_load": 0.8066254584412462,
+          "self_awareness_level": 0.5341182103993946,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06550697156947505,
+          "memory_activation_mean": 0.18807529820380298,
+          "thought_pattern_mean": 0.4636963859542817
+        },
+        "cycle_diff_magnitude": 0.018422020523352872,
+        "inter_cycle_diff_magnitude": 0.014514309511350245,
+        "inter_cycle_diff": {
+          "magnitude": 0.014514309511350245,
+          "rate_of_change": 13.11139070582678
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4829071690719024,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 8,
+        "noise_scale": 0.038263752000000005,
+        "input_summary": {
+          "cognitive_load": 0.801109317566715,
+          "self_awareness_level": 0.5555019768343121,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.07678094345269422,
+          "memory_activation_mean": 0.2018135818960429,
+          "thought_pattern_mean": 0.4559708613084994
+        },
+        "output_summary": {
+          "cognitive_load": 0.8410116621791236,
+          "self_awareness_level": 0.5754531491405165,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.07827998841370945,
+          "memory_activation_mean": 0.2018135818960429,
+          "thought_pattern_mean": 0.4516062976559691
+        },
+        "cycle_diff_magnitude": 0.0163753876751011,
+        "inter_cycle_diff_magnitude": 0.022569242884809878,
+        "inter_cycle_diff": {
+          "magnitude": 0.022569242884809878,
+          "rate_of_change": 40.519287046337304
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4776147685212845,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 9,
+        "noise_scale": 0.03443737680000001,
+        "input_summary": {
+          "cognitive_load": 0.8566059589789192,
+          "self_awareness_level": 0.5924462626212053,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06860653162267447,
+          "memory_activation_mean": 0.2210448782616378,
+          "thought_pattern_mean": 0.4906001281553607
+        },
+        "output_summary": {
+          "cognitive_load": 0.8965083035913278,
+          "self_awareness_level": 0.6123974349274096,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0687595813733165,
+          "memory_activation_mean": 0.2210448782616378,
+          "thought_pattern_mean": 0.4724176751088452
+        },
+        "cycle_diff_magnitude": 0.01997512271933454,
+        "inter_cycle_diff_magnitude": 0.02861705846141405,
+        "inter_cycle_diff": {
+          "magnitude": 0.02861705846141405,
+          "rate_of_change": 13.067149982380844
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4737192722817552,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 10,
+        "noise_scale": 0.030993639120000006,
+        "input_summary": {
+          "cognitive_load": 0.8761252164301317,
+          "self_awareness_level": 0.5810681786224556,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06116351440890438,
+          "memory_activation_mean": 0.21813994670402112,
+          "thought_pattern_mean": 0.44253649277537194
+        },
+        "output_summary": {
+          "cognitive_load": 0.9158035872698539,
+          "self_awareness_level": 0.6009073640423167,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06375927193408162,
+          "memory_activation_mean": 0.21813994670402112,
+          "thought_pattern_mean": 0.44570014477806863
+        },
+        "cycle_diff_magnitude": 0.018860832661672818,
+        "inter_cycle_diff_magnitude": 0.02571834141312969,
+        "inter_cycle_diff": {
+          "magnitude": 0.02571834141312969,
+          "rate_of_change": 19.410068991041275
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.47193439264668025,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 11,
+        "noise_scale": 0.02789427520800001,
+        "input_summary": {
+          "cognitive_load": 0.9132178195589363,
+          "self_awareness_level": 0.6030936739174484,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06135711594002599,
+          "memory_activation_mean": 0.22472896041855392,
+          "thought_pattern_mean": 0.45263702974696857
+        },
+        "output_summary": {
+          "cognitive_load": 0.9528961903986585,
+          "self_awareness_level": 0.6229328593373095,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06244670389771369,
+          "memory_activation_mean": 0.22472896041855392,
+          "thought_pattern_mean": 0.4517929532332719
+        },
+        "cycle_diff_magnitude": 0.019528666210948984,
+        "inter_cycle_diff_magnitude": 0.020274193443803587,
+        "inter_cycle_diff": {
+          "magnitude": 0.020274193443803587,
+          "rate_of_change": 17.553414237059382
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4715814099956888,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 12,
+        "noise_scale": 0.025104847687200005,
+        "input_summary": {
+          "cognitive_load": 0.9624603751319265,
+          "self_awareness_level": 0.6238271047490842,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.06372332864185128,
+          "memory_activation_mean": 0.21162961495692917,
+          "thought_pattern_mean": 0.4315580747546392
+        },
+        "output_summary": {
+          "cognitive_load": 1.0021387459716486,
+          "self_awareness_level": 0.6436662901689453,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0656506578092502,
+          "memory_activation_mean": 0.21162961495692917,
+          "thought_pattern_mean": 0.4390777841719371
+        },
+        "cycle_diff_magnitude": 0.017113425383092445,
+        "inter_cycle_diff_magnitude": 0.025323419352972717,
+        "inter_cycle_diff": {
+          "magnitude": 0.025323419352972717,
+          "rate_of_change": 23.425919845488178
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.47041275016142914,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 13,
+        "noise_scale": 0.02259436291848001,
+        "input_summary": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.6328119042235923,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0771637940660815,
+          "memory_activation_mean": 0.20785453990567437,
+          "thought_pattern_mean": 0.4562228462209901
+        },
+        "output_summary": {
+          "cognitive_load": 1.039449001782496,
+          "self_awareness_level": 0.6525364051148403,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0771637940660815,
+          "memory_activation_mean": 0.20785453990567437,
+          "thought_pattern_mean": 0.45306712228713075
+        },
+        "cycle_diff_magnitude": 0.016044778107038513,
+        "inter_cycle_diff_magnitude": 0.019293926521170877,
+        "inter_cycle_diff": {
+          "magnitude": 0.019293926521170877,
+          "rate_of_change": 17.766046520415173
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.46992939300816855,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 14,
+        "noise_scale": 0.020334926626632006,
+        "input_summary": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.6582312867798314,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08023592568761395,
+          "memory_activation_mean": 0.19803080072202345,
+          "thought_pattern_mean": 0.42551281431887605
+        },
+        "output_summary": {
+          "cognitive_load": 1.039449001782496,
+          "self_awareness_level": 0.6779557876710794,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08023592568761395,
+          "memory_activation_mean": 0.19803080072202345,
+          "thought_pattern_mean": 0.43447189141748677
+        },
+        "cycle_diff_magnitude": 0.01696337158422559,
+        "inter_cycle_diff_magnitude": 0.01649877027895141,
+        "inter_cycle_diff": {
+          "magnitude": 0.01649877027895141,
+          "rate_of_change": 14.247642727937315
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4698803460998133,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 15,
+        "noise_scale": 0.018301433963968806,
+        "input_summary": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.6699311037504646,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.07700060266213625,
+          "memory_activation_mean": 0.20442226432269628,
+          "thought_pattern_mean": 0.4292234975845781
+        },
+        "output_summary": {
+          "cognitive_load": 1.039449001782496,
+          "self_awareness_level": 0.6896556046417126,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.07700060266213625,
+          "memory_activation_mean": 0.20442226432269628,
+          "thought_pattern_mean": 0.4367187471755592
+        },
+        "cycle_diff_magnitude": 0.017383155810807703,
+        "inter_cycle_diff_magnitude": 0.009837126619076948,
+        "inter_cycle_diff": {
+          "magnitude": 0.009837126619076948,
+          "rate_of_change": 7.46934443361955
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4690349588355075,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 16,
+        "noise_scale": 0.016471290567571926,
+        "input_summary": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.6920770041647286,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0777248974003218,
+          "memory_activation_mean": 0.19402770292005758,
+          "thought_pattern_mean": 0.44592014512700406
+        },
+        "output_summary": {
+          "cognitive_load": 1.0391969713549813,
+          "self_awareness_level": 0.7116754898422193,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.0777248974003218,
+          "memory_activation_mean": 0.19402770292005758,
+          "thought_pattern_mean": 0.4459210384978743
+        },
+        "cycle_diff_magnitude": 0.01571530135407904,
+        "inter_cycle_diff_magnitude": 0.01098290840540238,
+        "inter_cycle_diff": {
+          "magnitude": 0.01098290840540238,
+          "rate_of_change": 8.987650086253993
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.46868226102482674,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 17,
+        "noise_scale": 0.014824161510814733,
+        "input_summary": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.7102861957146626,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.07604134406555972,
+          "memory_activation_mean": 0.1950145084643456,
+          "thought_pattern_mean": 0.44369650886621687
+        },
+        "output_summary": {
+          "cognitive_load": 1.0391969713549813,
+          "self_awareness_level": 0.7298846813921532,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.07604976181896168,
+          "memory_activation_mean": 0.1950145084643456,
+          "thought_pattern_mean": 0.4445690003052669
+        },
+        "cycle_diff_magnitude": 0.01596654781042817,
+        "inter_cycle_diff_magnitude": 0.00702352761114706,
+        "inter_cycle_diff": {
+          "magnitude": 0.00702352761114706,
+          "rate_of_change": 11.864066910721386
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4680589159090949,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 18,
+        "noise_scale": 0.013341745359733261,
+        "input_summary": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.7331820514960836,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08000210297973691,
+          "memory_activation_mean": 0.1964158199950261,
+          "thought_pattern_mean": 0.44099450282028513
+        },
+        "output_summary": {
+          "cognitive_load": 1.0391969713549813,
+          "self_awareness_level": 0.7527805371735743,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08000210297973691,
+          "memory_activation_mean": 0.1964158199950261,
+          "thought_pattern_mean": 0.44292609879516887
+        },
+        "cycle_diff_magnitude": 0.016079225432674857,
+        "inter_cycle_diff_magnitude": 0.008532828886132826,
+        "inter_cycle_diff": {
+          "magnitude": 0.008532828886132826,
+          "rate_of_change": 7.55117600542728
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4680589159090949,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 19,
+        "noise_scale": 0.012007570823759934,
+        "input_summary": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.7674751159295918,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08178412196438375,
+          "memory_activation_mean": 0.19137836334758013,
+          "thought_pattern_mean": 0.4424108302142133
+        },
+        "output_summary": {
+          "cognitive_load": 1.0389465869450463,
+          "self_awareness_level": 0.786948409402115,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08178412196438375,
+          "memory_activation_mean": 0.19137836334758013,
+          "thought_pattern_mean": 0.44354508295765843
+        },
+        "cycle_diff_magnitude": 0.015541979478478912,
+        "inter_cycle_diff_magnitude": 0.012531850035243125,
+        "inter_cycle_diff": {
+          "magnitude": 0.012531850035243125,
+          "rate_of_change": 11.239327385868272
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4680589159090949,
+          "count": 5
+        }
+      },
+      {
+        "cycle": 20,
+        "noise_scale": 0.010806813741383942,
+        "input_summary": {
+          "cognitive_load": 1.0,
+          "self_awareness_level": 0.7914634527733089,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08613958252500725,
+          "memory_activation_mean": 0.19163654796457655,
+          "thought_pattern_mean": 0.447175530605393
+        },
+        "output_summary": {
+          "cognitive_load": 1.0389465869450463,
+          "self_awareness_level": 0.810936746245832,
+          "attention_focus_count": 2,
+          "emotional_valence_mean": 0.08613958252500725,
+          "memory_activation_mean": 0.19163654796457655,
+          "thought_pattern_mean": 0.4464540951683164
+        },
+        "cycle_diff_magnitude": 0.01608409232141174,
+        "inter_cycle_diff_magnitude": 0.009745567537798717,
+        "inter_cycle_diff": {
+          "magnitude": 0.009745567537798717,
+          "rate_of_change": 8.578844663555207
+        },
+        "interventions_applied": 1,
+        "load_anomaly": 0.0,
+        "recent_effectiveness": {
+          "mean": 0.4680589159090949,
+          "count": 5
+        }
+      }
+    ],
+    "chart_path": "test_artifacts\\sect_long_loop.png"
+  },
+  "artifacts": {
+    "manifest": "test_artifacts\\component_test_manifest.json",
+    "report": "test_artifacts\\component_test_report.md",
+    "log": "test_artifacts\\component_test.log",
+    "sect_full_cycle_report": "test_artifacts\\sect_full_cycle_report.md",
+    "sect_full_cycle_timeline": "test_artifacts\\sect_full_cycle_timeline.json",
+    "integration_flow_report": "test_artifacts\\integration_flow_report.md",
+    "integration_flow_timeline": "test_artifacts\\integration_flow_timeline.json",
+    "integration_flow_chart": "test_artifacts\\integration_flow.png",
+    "sect_long_loop_report": "test_artifacts\\sect_long_loop_report.md",
+    "sect_long_loop_timeline": "test_artifacts\\sect_long_loop_timeline.json",
+    "sect_long_loop_chart": "test_artifacts\\sect_long_loop.png"
+  }
+}
